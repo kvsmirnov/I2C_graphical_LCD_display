@@ -263,7 +263,9 @@ void I2C_graphical_LCD_display::begin (const byte port,
 
   // now raise reset (and enable) line and wait briefly
   expanderWrite (GPIOA, LCD_RESET);
-  delay(1);
+
+  delay(3);
+
   waitreset();
 
 // turn LED light
