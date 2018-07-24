@@ -246,7 +246,10 @@ void I2C_graphical_LCD_display::begin (const byte port,
     Wire.begin (i2cAddress);
 
 // un-comment next line for faster I2C communications:
-//   TWBR = 12;
+
+  TWBR = 12;
+
+  _chipSelect = LCD_CS1;
 
   // byte mode (not sequential)
   expanderWrite (IOCON, 0b00100000);
@@ -255,16 +258,11 @@ void I2C_graphical_LCD_display::begin (const byte port,
   expanderWrite (IODIRA, 0);
   expanderWrite (IODIRB, 0);
 
-  // take reset line low
-  expanderWrite (GPIOA, LCD_RESET);
-
   // all lines low
   expanderWrite (GPIOA, 0);
 
-  // now raise reset (and enable) line and wait briefly
+  // now raise reset line and wait briefly
   expanderWrite (GPIOA, LCD_RESET);
-
-  delay(3);
 
   waitreset();
 
@@ -272,10 +270,8 @@ void I2C_graphical_LCD_display::begin (const byte port,
   _led = LCD_LIGHT;
 
   // turn LCD chip 1&2 on
-  _chipSelect = LCD_CS2;
   cmd (LCD_ON);
-
-  _chipSelect = LCD_CS1;
+  _chipSelect = LCD_CS2;
   cmd (LCD_ON);
 
   // clear entire LCD display
@@ -425,17 +421,10 @@ byte I2C_graphical_LCD_display::I2C_graphical_LCD_display::readData ()
 byte I2C_graphical_LCD_display::I2C_graphical_LCD_display::readStatus ()
 {
 
-#ifdef WRITETHROUGH_CACHE
-  return _cache [_cacheOffset];
-#endif
-
   // data port (on the MCP23017) is now input
   expanderWrite (IODIRB, 0xFF);
 
-  // lol, see the KS0108 spec sheet - you need to read twice to get the data
-//  expanderWrite (GPIOA, LCD_RESET | LCD_READ | LCD_ENABLE | _chipSelect | _led);  // set enable high
   expanderWrite (GPIOA, LCD_RESET | LCD_READ | LCD_ENABLE | _chipSelect | _led);  // set enable high
-//  expanderWrite (GPIOA, LCD_RESET | LCD_READ | LCD_ENABLE | _chipSelect | _led);  // set enable high
 
   byte data;
 

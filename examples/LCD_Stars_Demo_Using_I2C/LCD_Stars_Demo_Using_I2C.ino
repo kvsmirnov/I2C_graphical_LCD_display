@@ -17,11 +17,7 @@ void setup ()
   lcd.lighton();
   // black box  
   lcd.clear (0, 0, 63, 63, 0xFF);
-  lcd.clear (64, 0, 127, 63, 0x00);
 }  // end of setup
-
-char pix = 0B00110011;
-boolean light = true;
 
 void loop () 
 {
@@ -31,8 +27,4 @@ byte y;
 x = random(128);
 y = random(64);
 lcd.setPixel(x, y, lcd.getPixel(x, y)^1);
-//delay(100);
 }  // nothing to see here, move along
-
-
-

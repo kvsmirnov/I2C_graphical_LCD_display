@@ -17,4 +17,5 @@ scroll	KEYWORD2
 lighton	KEYWORD2
 lightoff	KEYWORD2
 waitnobusy	KEYWORD2
+waitreset	KEYWORD2
 readStatus	KEYWORD2
